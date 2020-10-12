@@ -12,9 +12,12 @@ jobs:
         with:
           fetch-depth: 0
           
-      - name: "Print github event"
-        run: |
-          echo "${{ github.event }}"
+      - name: Debug Action
+        uses: hmarr/debug-action@v1.0.0
+                  
+#       - name: "Print github event"
+#         run: |
+#           echo "${{ github.event }}"
           
 #       - name: "Setup copybara"
 #         run: |
