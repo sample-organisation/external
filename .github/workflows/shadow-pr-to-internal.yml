@@ -5,7 +5,7 @@ on:
 jobs:
   shadow-pr:
     runs-on: ubuntu-latest
-    if: ${{ !startsWith(github.event.head.ref, "from_internal") }}
+    if: ${{ startsWith(github.event.head.ref, "from_internal") != true }}
     steps:
       - uses: actions/checkout@v2
         with:
