@@ -16,7 +16,7 @@ core.workflow(
 
     origin_files = glob(["**"], exclude = ["copy.bara.sky"]),
     
-    destination_files = glob(["external/**"])
+    destination_files = glob(["external/**"]),
 
     authoring = authoring.pass_thru("Vishnu Bharathi P <vishnubharathi04@gmail.com>"),
     transformations = [
