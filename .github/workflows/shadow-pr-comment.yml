@@ -1,0 +1,10 @@
+on:
+  pull_request_review_comment:
+    types: [created, edited, deleted]
+    
+jobs:
+  created:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Action
+        uses: hmarr/debug-action@v1.0.0
