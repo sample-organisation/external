@@ -3,7 +3,7 @@ on:
     types: [opened]
 
 jobs:
-  shadow-pr:
+  open-pr:
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.event.pull_request.head.ref, 'from_internal') != true }}
     steps:
