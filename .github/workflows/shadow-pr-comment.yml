@@ -43,9 +43,17 @@ jobs:
             console.log('pr number', pr.number);
             
             let generatedBody = `
-            commented_by: @${context.payload.comment.user.login}
+            <!-- 
+            # Metadata for Github actions
+            # Do not delete this
+
             comment_id: ${context.payload.comment.id}
+            -->
+            
+            @${context.payload.comment.user.login} commented:
+            
             ---
+            
             ${context.payload.comment.body}
             `
             
