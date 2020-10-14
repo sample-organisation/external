@@ -42,11 +42,18 @@ jobs:
             const pr = prs.data[0];
             console.log('pr number', pr.number);
             
+            let generatedBody = `
+            commented_by: @${context.payload.comment.user.login}
+            comment_id: ${context.payload.comment.id}
+            ---
+            ${context.payload.comment.body}
+            `
+            
             const prComment = await github.pulls.createReviewComment({
               owner: 'sample-organisation',
               repo: 'internal',
               pull_number: pr.number,
-              body: context.payload.comment.body,
+              body: generatedBody,
               commit_id: pr.head.sha,
               position: context.payload.comment.position,
               path: context.payload.comment.path,
