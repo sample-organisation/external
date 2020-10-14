@@ -22,7 +22,7 @@ jobs:
             
             console.log('branch Name', branchName);
             
-            const prs = github.pulls.list({
+            const prs = await github.pulls.list({
               owner: 'sample-organisation',
               repo: 'internal',
               base: 'main',
