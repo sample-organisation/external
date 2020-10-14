@@ -41,7 +41,25 @@ jobs:
             
             const pr = prs.data[0];
             console.log('pr number', pr.number);
-
+            
+            const prComment = await github.pulls.createReviewComment({
+              owner: 'sample-organisation',
+              repo: 'internal',
+              pull_number: pr.number,
+              body: context.payload.comment.body,
+              commit_id: pr.head.sha,
+              position: context.payload.comment.position,
+              path: context.payload.comment.path,
+              side: context.payload.comment.side,
+              line: context.payload.comment.line,
+              start_line: context.payload.comment.start_line,
+              start_side: context.payload.comment.start_side
+            });
+            
+            if (prComment.status != 200) {
+              core.setFailed('API request to create pr review comment returned non-success status code ' + prComment.status);
+              return
+            }
   edited-comment:
     runs-on: ubuntu-latest
     if: ${{ github.event.action == 'edited' }}
