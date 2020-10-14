@@ -29,12 +29,17 @@ jobs:
               head: 'sample-organisation:' + branchName,
             });
             
-            if (prs.length < 1) {
+            if (prs.status != 200) {
+              core.setFailed('API request to get pull requests returned non-success status code ' + prs.status);
+              return;
+            } 
+            
+            if (prs.data.length < 1) {
               core.setFailed('No PR found');
               return;    
             }
             
-            const pr = prs[0];
+            const pr = prs.data[0];
             console.log('pr number', pr.number);
 
   edited-comment:
