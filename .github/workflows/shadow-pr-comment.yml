@@ -29,7 +29,13 @@ jobs:
               head: 'sample-organisation:' + branchName,
             });
             
-            console.log(JSON.stringify(prs, null, 4));
+            if (prs.length < 1) {
+              core.setFailed('No PR found');
+              return;    
+            }
+            
+            const pr = prs[0];
+            console.log('pr number', pr.number);
 
   edited-comment:
     runs-on: ubuntu-latest
