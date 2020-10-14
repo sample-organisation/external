@@ -56,7 +56,7 @@ jobs:
               start_side: context.payload.comment.start_side
             });
             
-            if (prComment.status != 200) {
+            if (prComment.status > 299) {
               core.setFailed('API request to create pr review comment returned non-success status code ' + prComment.status);
               return
             }
