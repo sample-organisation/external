@@ -18,6 +18,17 @@ jobs:
           github-token: ${{secrets.GH_TOKEN}}
           script: |
             console.log(JSON.stringify(context.payload), null, 4);
+            const pullRequestNumber = context.payload.pull_request.number;
+            const branchName = 'from_external_refs/pull/' +  pullRequestNumber + '/head';
+            
+            const prs = github.pulls.list({
+              owner: 'sample-organisation',
+              repo: 'internal',
+              base: 'main',
+              head: branchName,
+            });
+            
+            console.log(JSON.stringify(prs, null, 4));
 
   edited-comment:
     runs-on: ubuntu-latest
