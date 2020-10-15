@@ -5,7 +5,7 @@ on:
 jobs:
   created-comment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == 'created' }}
+    if: ${{ github.event.action == 'created' && github.event.issue.pull_request }}
     steps:
       - name: Debug Action
         uses: hmarr/debug-action@v1.0.0
@@ -15,7 +15,7 @@ jobs:
        
   edited-comment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == 'edited' }}
+    if: ${{ github.event.action == 'edited' && github.event.issue.pull_request }}
     steps:
       - name: Debug Action
         uses: hmarr/debug-action@v1.0.0
@@ -25,7 +25,7 @@ jobs:
           
   deleted-comment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == 'deleted' }}
+    if: ${{ github.event.action == 'deleted' && github.event.issue.pull_request }}
     steps:
       - name: Debug Action
         uses: hmarr/debug-action@v1.0.0
