@@ -115,8 +115,8 @@ jobs:
               issue_number: pr.number
             });
             
-            if (comments.status != 200) {
-              core.setFailed('API request to get comments of PR returned non-success status code ' + prs.status);
+            if (commentsResult.status != 200) {
+              core.setFailed('API request to get comments of PR returned non-success status code ' + commentsResult.status);
               return;
             }
             
