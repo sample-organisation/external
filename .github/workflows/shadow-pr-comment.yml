@@ -138,7 +138,7 @@ jobs:
             
             `;
             
-            const matchingComments = comments.filter(function (comment) { return comment.body.contains(generatedCommentHead); });
+            const matchingComments = comments.filter(function (comment) { return comment.body.includes(generatedCommentHead); });
             
             console.log('matching comments');
             
