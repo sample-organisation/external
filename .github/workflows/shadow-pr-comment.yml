@@ -144,7 +144,29 @@ jobs:
             
             console.log(JSON.stringify(matchingComments, null, 4));
             
+            const matchingComment = matchingComments[0];
+            
+            if (!matchingComment) {
+              core.setFailed('Failed to find a matching comment in the shadow PR for comment: ' + context.payload.comment.id);
+              return;
+            }
+            
+            const generatedBody = `${generatedCommentHead}
+            
+            ${context.payload.comment.body}
+            `;
+            
+            const updateResult = await github.issues.updateComment({
+              owner: 'sample-organisation',
+              repo: 'internal',
+              comment_id: matchingComment.id,
+              body: generatedBody
+            });
 
+            if (updateResult.status > 299) {
+              core.setFailed('API request to update pr comment returned non-success status code ' + updateResult.status);
+              return
+            }
             
   deleted-comment:
     runs-on: ubuntu-latest
