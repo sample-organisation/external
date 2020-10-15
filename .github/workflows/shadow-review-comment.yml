@@ -85,8 +85,9 @@ jobs:
               console.log(JSON.stringify(shadowReviewComments.data, null, 4));
               console.log(generatedCommentHead);
               
-              const parentShadowComment = shadowReviewComments.data.filter(function(comment) { return comment.body.includes(generatedCommentHead); });
-              if (!parentShadowComment[0]) {
+              let parentShadowComment = shadowReviewComments.data.filter(function(comment) { return comment.body.includes(generatedCommentHead); });
+              parentShadowComment = parentShadowComment[0];
+              if (!parentShadowComment) {
                 core.setFailed('Unable to find a parent review comment for comment ' + context.payload.comment.in_reply_to_id);
                 return;
               }
