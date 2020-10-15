@@ -90,13 +90,16 @@ jobs:
               });
               
               if (shadowReviewComments.status != 200) {
-                core.setFailed('API request to get pull request review comments returned non-success status code ' + prs.status);
+                core.setFailed('API request to get pull request review comments returned non-success status code ' + shadowReviewComments.status);
                 return;
               }
               
+              console.log(JSON.stringify(shadowReviewComments.data, null, 4));
+              console.log(generatedCommentHead);
+              
               const parentShadowComment = shadowReviewComments.data.filter(function(comment) { return comment.body.includes(generatedCommentHead); });
               if (!parentShadowComment[0]) {
-                core.setFailed('Unable to find a parent review comment for comment' + context.payload.comment.in_reply_to_id);
+                core.setFailed('Unable to find a parent review comment for comment ' + context.payload.comment.in_reply_to_id);
                 return;
               }
               
