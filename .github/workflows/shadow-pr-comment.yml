@@ -60,8 +60,7 @@ jobs:
               owner: 'sample-organisation',
               repo: 'internal',
               issue_number: pr.number,
-              body: generatedBody,
-              commit_id: pr.head.sha
+              body: generatedBody
             });
             
             if (prComment.status > 299) {
