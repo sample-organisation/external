@@ -1,2 +1,15 @@
 on:
-  push
+  push:
+    branches: 
+      - main
+
+jobs:
+  push-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          
+      - name: Debug Action
+        uses: hmarr/debug-action@v1.0.0
