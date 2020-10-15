@@ -42,18 +42,17 @@ jobs:
             const pr = prs.data[0];
             console.log('pr number', pr.number);
             
+            const quotedBody = context.payload.comment.body.split('\n').map(function(line) { return '> ' + line; }).join('\n');
+            
             let generatedBody = `
             <!-- 
             # Metadata for Github actions
             # Do not delete this
             comment_id: ${context.payload.comment.id}
             -->
-            
             @${context.payload.comment.user.login} commented:
             
-            ---
-            
-            ${context.payload.comment.body}
+            ${quotedBody}
             `
             
             const prComment = await github.issues.createComment({
