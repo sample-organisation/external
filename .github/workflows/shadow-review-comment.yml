@@ -43,12 +43,7 @@ jobs:
             console.log('pr number', pr.number);
             
             let generatedBody = `
-            <!-- 
-            # Metadata for Github actions
-            # Do not delete this
-
-            comment_id: ${context.payload.comment.id}
-            -->
+            <!-- comment_id: ${context.payload.comment.id} -->
             
             @${context.payload.comment.user.login} commented:
             
@@ -74,14 +69,7 @@ jobs:
             let prComment;
             
             if (context.payload.comment.in_reply_to_id) {
-            const generatedCommentHead = `
-            <!-- 
-            # Metadata for Github actions
-            # Do not delete this
-
-            comment_id: ${context.payload.comment.in_reply_to_id}
-            -->
-            `;
+              const generatedCommentHead = `<!-- comment_id: ${context.payload.comment.id} -->`
 
               const shadowReviewComments = await github.pulls.listReviewComments({
                 owner: 'sample-organisation',
