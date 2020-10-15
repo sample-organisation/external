@@ -55,9 +55,9 @@ jobs:
             ---
             
             ${context.payload.comment.body}
-            `
+            `;
             
-            const prComment = await github.pulls.createReviewComment({
+            let reviewCommentRequest = {
               owner: 'sample-organisation',
               repo: 'internal',
               pull_number: pr.number,
@@ -69,8 +69,48 @@ jobs:
               line: context.payload.comment.line,
               start_line: context.payload.comment.start_line,
               start_side: context.payload.comment.start_side
-            });
+            };
             
+            let prComment;
+            
+            if (context.payload.comment.in_reply_to_id) {
+              const generatedCommentHead = `
+              <!-- 
+              # Metadata for Github actions
+              # Do not delete this
+              comment_id: ${context.payload.comment.in_reply_to_id}
+              -->
+              `;
+              
+              const shadowReviewComments = await github.pulls.listReviewComments({
+                owner: 'sample-organisation',
+                repo: 'internal',
+                pull_number: pr.number
+              });
+              
+              if (shadowReviewComments.status != 200) {
+                core.setFailed('API request to get pull request review comments returned non-success status code ' + prs.status);
+                return;
+              }
+              
+              const parentShadowComment = shadowReviewComments.data.filter(function(comment) { return comment.body.includes(generatedCommentHead); });
+              if (!parentShadowComment[0]) {
+                core.setFailed('Unable to find a parent review comment for comment' + context.payload.comment.in_reply_to_id);
+                return;
+              }
+              
+              prComment = await github.pulls.createReplyForReviewComment({
+                owner: 'sample-organisation',
+                repo: 'internal',
+                pull_number: pr.number,
+                body: generatedBody, 
+                comment_id: parentShadowComment.id
+              });
+
+            } else {
+              prComment = await github.pulls.createReviewComment(reviewCommentRequest);
+            }
+
             if (prComment.status > 299) {
               core.setFailed('API request to create pr review comment returned non-success status code ' + prComment.status);
               return
