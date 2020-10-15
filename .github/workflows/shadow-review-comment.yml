@@ -69,7 +69,7 @@ jobs:
             let prComment;
             
             if (context.payload.comment.in_reply_to_id) {
-              const generatedCommentHead = `<!-- comment_id: ${context.payload.comment.id} -->`
+              const generatedCommentHead = `<!-- comment_id: ${context.payload.comment.in_reply_to_id} -->`
 
               const shadowReviewComments = await github.pulls.listReviewComments({
                 owner: 'sample-organisation',
