@@ -112,7 +112,8 @@ jobs:
             const commentsResult = await github.issues.listComments({
               owner: 'sample-organisation',
               repo: 'internal',
-              issue_number: pr.number
+              issue_number: pr.number,
+              since: context.payload.comment.created_at
             });
             
             if (commentsResult.status != 200) {
@@ -123,6 +124,27 @@ jobs:
             const comments = commentsResult.data;
             
             console.log(JSON.stringify(comments, null, 4));
+            
+            const generatedCommentHead = `
+            <!-- 
+            # Metadata for Github actions
+            # Do not delete this
+            comment_id: ${context.payload.comment.id}
+            -->
+            
+            @${context.payload.comment.user.login} commented:
+            
+            ---
+            
+            `;
+            
+            const matchingComments = comments.filter(function (comment) { return comment.body.contains(generatedCommentHead); });
+            
+            console.log('matching comments');
+            
+            console.log(JSON.stringify(matchingComments, null, 4));
+            
+
             
   deleted-comment:
     runs-on: ubuntu-latest
