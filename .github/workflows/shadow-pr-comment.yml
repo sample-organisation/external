@@ -12,6 +12,62 @@ jobs:
       - name: Shadow Comment Creation
         run: |
           echo "code for shawdowing newly created comment should be here"
+          
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_TOKEN}}
+          script: |
+            const pullRequestNumber = context.payload.issue.number;
+            const branchName = 'from_external_refs/pull/' +  pullRequestNumber + '/head';
+            
+            console.log('branch Name', branchName);
+            
+            const prs = await github.pulls.list({
+              owner: 'sample-organisation',
+              repo: 'internal',
+              base: 'main',
+              head: 'sample-organisation:' + branchName,
+            });
+            
+            if (prs.status != 200) {
+              core.setFailed('API request to get pull requests returned non-success status code ' + prs.status);
+              return;
+            } 
+            
+            if (prs.data.length < 1) {
+              core.setFailed('No PR found');
+              return;    
+            }
+            
+            const pr = prs.data[0];
+            console.log('pr number', pr.number);
+            
+            let generatedBody = `
+            <!-- 
+            # Metadata for Github actions
+            # Do not delete this
+            comment_id: ${context.payload.comment.id}
+            -->
+            
+            @${context.payload.comment.user.login} commented:
+            
+            ---
+            
+            ${context.payload.comment.body}
+            `
+            
+            const prComment = await github.issues.createComment({
+              owner: 'sample-organisation',
+              repo: 'internal',
+              issue_number: pr.number,
+              body: generatedBody,
+              commit_id: pr.head.sha
+            });
+            
+            if (prComment.status > 299) {
+              core.setFailed('API request to create pr review comment returned non-success status code ' + prComment.status);
+              return
+            }
        
   edited-comment:
     runs-on: ubuntu-latest
