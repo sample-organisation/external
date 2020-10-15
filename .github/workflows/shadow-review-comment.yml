@@ -74,15 +74,15 @@ jobs:
             let prComment;
             
             if (context.payload.comment.in_reply_to_id) {
-              const generatedCommentHead = `
-              <!-- 
-              # Metadata for Github actions
-              # Do not delete this
+            const generatedCommentHead = `
+            <!-- 
+            # Metadata for Github actions
+            # Do not delete this
 
-              comment_id: ${context.payload.comment.in_reply_to_id}
-              -->
-              `;
-              
+            comment_id: ${context.payload.comment.in_reply_to_id}
+            -->
+            `;
+
               const shadowReviewComments = await github.pulls.listReviewComments({
                 owner: 'sample-organisation',
                 repo: 'internal',
