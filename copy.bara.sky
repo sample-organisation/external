@@ -10,6 +10,7 @@ core.workflow(
       pr_branch = "from_external_${CONTEXT_REFERENCE}",
       title = "pr from external ${CONTEXT_REFERENCE} ",
       body = "this is a sample pull request",
+      integrates = [],
     ),
 
     mode = "CHANGE_REQUEST",
@@ -21,5 +22,6 @@ core.workflow(
     authoring = authoring.pass_thru("Vishnu Bharathi P <vishnubharathi04@gmail.com>"),
     transformations = [
         metadata.restore_author("ORIGINAL_AUTHOR", search_all_changes = True),
+        metadata.expose_label("COPYBARA_INTEGRATE_REVIEW"),
     ],
 )
